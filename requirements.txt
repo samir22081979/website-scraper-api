@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+requests
+bs4
+lxml
+playwright
