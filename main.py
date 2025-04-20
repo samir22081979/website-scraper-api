@@ -20,9 +20,13 @@ async def scrape(data: ScrapeRequest):
         cleaned = load_cleaned_data(cleaned_path)
         final_chunks = []
         for page in cleaned:
-            for paragraph in page.get("paragraphs", []):
+            # ✅ Ensure page is a dict and contains paragraphs
+            if not isinstance(page, dict) or "paragraphs" not in page:
+                continue
+
+            for paragraph in page["paragraphs"]:
                 final_chunks.append({
-                    "url": page["url"],
+                    "url": page.get("url", ""),
                     "title": page.get("title", ""),
                     "chunk": paragraph,
                     "chatbot_id": data.chatbot_id,
