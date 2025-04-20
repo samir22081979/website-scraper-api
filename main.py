@@ -1,27 +1,17 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
-import asyncio
-from scrape_async import run_all, load_cleaned_data
-
-app = FastAPI()
-
-class ScrapeRequest(BaseModel):
-    domain: str
-    chatbot_id: str
-    user_id: str
-
 @app.post("/scrape")
 async def scrape(data: ScrapeRequest):
     try:
-        # Run the full scrape pipeline
         cleaned_path = await run_all(data.domain, max_pages=100)
-
-        # Load and enrich the data
         cleaned = load_cleaned_data(cleaned_path)
+
         final_chunks = []
-        for page in cleaned:
-            # ✅ Ensure page is a dict and contains paragraphs
-            if not isinstance(page, dict) or "paragraphs" not in page:
+        for i, page in enumerate(cleaned):
+            if not isinstance(page, dict):
+                print(f"⚠️ Skipped item {i}: Not a dict → {type(page)}")
+                continue
+
+            if "paragraphs" not in page or not isinstance(page["paragraphs"], list):
+                print(f"⚠️ Skipped item {i}: Missing or invalid 'paragraphs'")
                 continue
 
             for paragraph in page["paragraphs"]:
