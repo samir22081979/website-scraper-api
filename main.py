@@ -10,18 +10,15 @@ async def scrape(data: ScrapeRequest):
         cleaned_path = await run_all(data.domain, max_pages=100)
         cleaned = load_cleaned_data(cleaned_path)
 
-        # Check if cleaned is a list
         if not isinstance(cleaned, list):
             return {
                 "error": f"load_cleaned_data did not return a list — got {type(cleaned)}",
                 "data": cleaned
             }
 
-        # If it's an empty list
         if not cleaned:
             return {"info": "Scraped data is empty", "data": []}
 
-        # Check if first item is a dict with 'paragraphs'
         first_item = cleaned[0]
         return {
             "status": "success",
