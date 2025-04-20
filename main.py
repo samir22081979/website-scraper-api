@@ -20,7 +20,7 @@ async def scrape(data: ScrapeRequest):
         cleaned = load_cleaned_data(cleaned_path)
         final_chunks = []
         for page in cleaned:
-            for paragraph in page["paragraphs"]:
+            for paragraph in page.get("paragraphs", []):
                 final_chunks.append({
                     "url": page["url"],
                     "title": page.get("title", ""),
