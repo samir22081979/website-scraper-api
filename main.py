@@ -1,3 +1,9 @@
+from fastapi import FastAPI
+from pydantic import BaseModel
+import asyncio
+from scrape_async import run_all, load_cleaned_data
+
+app = FastAPI()  # ← THIS LINE is mandatory
 @app.post("/scrape")
 async def scrape(data: ScrapeRequest):
     try:
