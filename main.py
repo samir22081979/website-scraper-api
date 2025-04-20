@@ -3,7 +3,14 @@ from pydantic import BaseModel
 import asyncio
 from scrape_async import run_all, load_cleaned_data
 
-app = FastAPI()  # ← THIS LINE is mandatory
+app = FastAPI()
+
+# ✅ This was missing!
+class ScrapeRequest(BaseModel):
+    domain: str
+    chatbot_id: str
+    user_id: str
+
 @app.post("/scrape")
 async def scrape(data: ScrapeRequest):
     try:
