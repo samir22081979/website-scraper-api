@@ -98,7 +98,11 @@ def clean_data(data):
             "paragraphs": unique_paragraphs,
         })
     return cleaned
-
+    
+@app.get("/healthz")
+def healthz():
+    return {"status": "ok"}
+    
 @app.post("/scrape")
 async def scrape(request: ScrapeRequest):
     try:
