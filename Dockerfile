@@ -1,8 +1,9 @@
 FROM n8nio/n8n:latest
 
 USER root
-RUN apt-get update \
- && apt-get install -y python3 python3-pip dos2unix \
+# Use Alpine package manager
+RUN apk update \
+ && apk add --no-cache python3 py3-pip dos2unix \
  && pip3 install --upgrade pip
 
 COPY scraper.py /data/scraper.py
